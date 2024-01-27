@@ -175,3 +175,11 @@ para gerenciar o cluster, você deve configurar o kubectl no nó mestre. Crie o 
   sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
   sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```
+
+# **6. Instale o plugin de rede :**
+Nessa parte pode notar ao rodar o comando `kubectl get nodes` que o node master ainda está com o status de not ready. Para resolver isso precisamos de instalar o pluguin de rede.
+Esse irá prover a comunicação entre os PODS. nesse tutorial resolvemos trabalhar com o Wave. Para instalar execute o seguinte comando:
+
+```bash
+kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s.yaml
+```
