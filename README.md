@@ -14,7 +14,7 @@ Primeira coisa, para que possamos seguir em frente, temos que entender quais sã
 
 ## Passos de Instalação
 
-**1. configurar nomes de host:**
+# **1. configurar nomes de host:**
 ```bash
 sudo hostnamectl set-hostname "master-node"
 ```
@@ -23,7 +23,7 @@ Caso queira ver o efeito imediato na troca do nome podem executar o seguinte com
 ```bash
 exec bash
 ```
-**1. Disabilite swap do servidor:**
+# **2. Disabilite swap do servidor:**
 
 Esse comando desativa temporariamente a troca em seu sistema, ao reiniciar ele volta a swap para habilitado novamente:
 
@@ -34,7 +34,7 @@ Esse proximo comando modifica o arquivo de configuração para manter a troca de
 ```bash
 sudo sed -i '/ swap / s/^/#/' /etc/fstab
 ```
-**Configurar IPV4 bridge:**
+# **3. Configurar IPV4 bridge:**
 
 ```bash
 cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
@@ -57,7 +57,7 @@ sudo sysctl --system
 
 ```
 
-**Intale o kubelet, kubeadm e kubectl:**
+# **4. Intale o kubelet, kubeadm e kubectl:**
 
 Garanta que o indice de pacotes estejam atualizados:
 ```bash
@@ -91,7 +91,7 @@ Agora está tudo pronto para instalarmos os pacotes do kubernetes:
 sudo apt install -y kubelet=1.26.5-00 kubeadm=1.26.5-00 kubectl=1.26.5-00
 ```
 
-# **Instale o conteinerd.io:**
+# **5. Instale o conteinerd.io:**
 
 Configure os repositorios do Docker "apt" para poder dar continuidade na instalação do conteinerd.io
 
@@ -153,7 +153,7 @@ Caso queira deixar para que o kubelet suba automático ao iniciar o server, exec
 ```bash
 sudo systemctl enable kubelet.service
 ```
-# **inicializar o cluster Kubernetes:**
+# **6. inicializar o cluster Kubernetes:**
 
 Ao inicializar um plano de controle do Kubernetes usando kubeadm, vários componentes são implantados para gerenciar e orquestrar o cluster. Alguns exemplos desses componentes são kube-apiserver, kube-controller-manager, kube-scheduler, etcd, kube-proxy. 'Precisamos baixar as imagens desses componentes executando o seguinte comando.
 
