@@ -32,7 +32,7 @@ sudo swapoff -a
 ```
 Esse proximo comando modifica o arquivo de configuração para manter a troca desativada mesmo após a reinicialização do sistema.
 ```bash
-sudo sed -i '/ swap / s/^/#/' /etc/fstab
+sudo sed -i '/^\/swap/ s/^/#/' /etc/fstab
 ```
 # **3. Configurar IPV4 bridge:**
 
