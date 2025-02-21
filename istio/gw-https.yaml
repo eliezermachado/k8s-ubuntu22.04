@@ -1,0 +1,26 @@
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  name: gw-https
+  namespace: istio-ingress
+spec:
+  selector:
+    istio: ingress
+  servers:
+  - hosts:
+    - "*.pamtecnologia.com.br"
+    port:
+      name: https
+      number: 443
+      protocol: HTTPS
+    tls:
+      credentialName: lab.lan-ssl
+      mode: SIMPLE
+  - hosts:
+    - "*.pamtecnologia.com.br"
+    port:
+      name: http
+      number: 80
+      protocol: HTTP
+    tls:
+      httpsRedirect: true
