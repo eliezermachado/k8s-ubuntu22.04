@@ -2,7 +2,7 @@
 set -e  # Interrompe o script se algum comando falhar
 
 LOG_FILE="/var/log/k8s_join.log"
-JOIN_COMMAND="kubeadm join aqui"  # Substitua pelo comando de join real
+JOIN_COMMAND="commando-aqui"
 
 exec > >(tee -a "$LOG_FILE") 2>&1  # Redireciona stdout e stderr para o log
 
@@ -10,7 +10,7 @@ check_success() {
   if [ $? -eq 0 ]; then
     echo -e "✔️ $1 concluído com sucesso."
   else
-    echo -e "❌ Erro ao executar: $1" >&2
+    echo -e " Erro ao executar: $1" >&2
     exit 1
   fi
 }
@@ -27,6 +27,16 @@ else
 fi
 
 echo "Iniciando join do nó ao cluster Kubernetes para arquitetura $ARCH..."
+
+  # Passo 0: Ajuste IPTABLES
+sudo apt update -y
+sudo DEBIAN_FRONTEND=noninteractive apt install -y iptables-persistent
+
+echo "Ajuste IPTABLES"
+sudo iptables -F
+sudo iptables -X
+sudo netfilter-persistent save
+check_success "Ajuste do IPTABLES"
 
 # Passo 1: Configurar Módulos do Kernel e Rede
 echo "Configurando módulos do kernel e rede..."
@@ -89,10 +99,3 @@ check_success "Join ao cluster realizado com sucesso"
 echo "Verificando estado do nó..."
 kubectl get nodes &>> "$LOG_FILE"
 echo "✔️ Nó adicionado ao cluster com sucesso! Para acompanhar os logs, use: tail -f $LOG_FILE"
-
-# Passo 8: Ajuste IPTABLES
-echo "Ajuste IPTABLES"
-sudo iptables -F
-sudo iptables -X
-sudo netfilter-persistent save
-check_success "Ajuste do IPTABLES"

@@ -8,7 +8,7 @@ check_success() {
     if [ $? -eq 0 ]; then
         echo -e "✔️ $1 concluído com sucesso."
     else
-        echo -e "❌ Erro ao executar: $1" >&2
+        echo -e " Erro ao executar: $1" >&2
         exit 1
     fi
 }
@@ -23,7 +23,7 @@ configure_and_validate_kubectl() {
         sudo chown $(id -u):$(id -g) $HOME/.kube/config
         echo "✔️ Arquivo de configuração do kubectl copiado com sucesso."
     else
-        echo "❌ Falha ao copiar o arquivo de configuração do kubectl. Tentando método alternativo..."
+        echo " Falha ao copiar o arquivo de configuração do kubectl. Tentando método alternativo..."
         
         # Método alternativo: Gerar um novo token e configurar o kubectl
         if sudo kubeadm token create --print-join-command &>> "$LOG_FILE"; then
@@ -32,11 +32,11 @@ configure_and_validate_kubectl() {
                 sudo chown $(id -u):$(id -g) $HOME/.kube/config
                 echo "✔️ Arquivo de configuração do kubectl copiado com sucesso (método alternativo)."
             else
-                echo "❌ Falha ao copiar o arquivo de configuração do kubectl (método alternativo)."
+                echo " Falha ao copiar o arquivo de configuração do kubectl (método alternativo)."
                 exit 1
             fi
         else
-            echo "❌ Falha ao gerar novo token."
+            echo " Falha ao gerar novo token."
             exit 1
         fi
     fi
@@ -46,7 +46,7 @@ configure_and_validate_kubectl() {
     if kubectl get nodes &>> "$LOG_FILE" && kubectl get pods -A &>> "$LOG_FILE"; then
         echo "✔️ kubectl está funcionando corretamente e o cluster está acessível."
     else
-        echo "❌ Erro: kubectl não está funcionando corretamente ou o cluster não está acessível."
+        echo " Erro: kubectl não está funcionando corretamente ou o cluster não está acessível."
         exit 1
     fi
 }
@@ -63,6 +63,16 @@ else
 fi
 
 echo "Iniciando instalação do Kubernetes para arquitetura $ARCH"
+
+# Passo 0: Ajuste IPTABLES
+sudo apt update -y
+sudo DEBIAN_FRONTEND=noninteractive apt install -y iptables-persistent
+
+echo "Ajuste IPTABLES"
+sudo iptables -F
+sudo iptables -X
+sudo netfilter-persistent save
+check_success "Ajuste do IPTABLES"
 
 # Passo 1: Configurar Módulos do Kernel e Rede
 echo "Configurando módulos do kernel e rede..."
@@ -82,10 +92,6 @@ EOF
 
 sudo sysctl --system > /dev/null
 
-echo "Ajuste Firewall - Control Plane"
-sudo iptables -F
-sudo iptables -X
-sudo netfilter-persistent save
 
 check_success "Configuração de módulos do kernel e rede"
 
