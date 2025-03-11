@@ -23,17 +23,3 @@ kubectl patch svc istio-ingressgateway -n istio-system -p '{"spec": {"type": "Lo
 echo "Aguardando a atribuição de IP pelo MetalLB..."
 sleep 10  # Ajuste o tempo conforme necessário
 kubectl get svc istio-ingressgateway -n istio-system
-
-# Implantar a aplicação de exemplo Bookinfo
-kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml
-kubectl apply -f samples/bookinfo/networking/bookinfo-gateway.yaml
-
-# Obter o IP externo do Istio Ingress Gateway
-EXTERNAL_IP=$(kubectl get svc istio-ingressgateway -n istio-system -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-
-if [ -z "$EXTERNAL_IP" ]; then
-    echo "O IP externo ainda não foi atribuído. Verifique o MetalLB e execute novamente:"
-    echo "kubectl get svc istio-ingressgateway -n istio-system"
-else
-    echo "Acesse a aplicação em: http://$EXTERNAL_IP/productpage"
-fi

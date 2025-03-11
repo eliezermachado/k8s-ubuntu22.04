@@ -1,19 +1,19 @@
 apiVersion: networking.istio.io/v1
 kind: VirtualService
 metadata:
-  name: request-logger
-  namespace: pamtecnologia-dev
+  name: teste
+  namespace: meudominio-dev
 spec:
   gateways:
   - istio-ingress/gw-https
   hosts:
-  - request-logger.pamtecnologia.com.br
+  - teste.meudominio.com.br
   http:
   - match:
     - uri:
         prefix: /
     route:
     - destination:
-        host: request-logger
+        host: teste
         port:
           number: 8080
