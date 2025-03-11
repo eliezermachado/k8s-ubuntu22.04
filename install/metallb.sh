@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Defina o intervalo de IPs que o MetalLB usará
-IP_RANGE="172.16.0.55-172.16.0.59"  # Ajuste conforme sua rede
+IP_RANGE="10.200.254.200-10.200.254.210"  # Ajuste conforme sua rede
 
 # Cria o namespace do MetalLB
 kubectl create namespace metallb-system || echo "Namespace já existe"

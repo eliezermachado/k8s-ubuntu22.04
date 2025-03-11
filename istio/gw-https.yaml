@@ -8,7 +8,7 @@ spec:
     istio: ingress
   servers:
   - hosts:
-    - "*.pamtecnologia.com.br"
+    - "*.meudominio.com.br"
     port:
       name: https
       number: 443
@@ -17,7 +17,7 @@ spec:
       credentialName: lab.lan-ssl
       mode: SIMPLE
   - hosts:
-    - "*.pamtecnologia.com.br"
+    - "*.meudominio.com.br"
     port:
       name: http
       number: 80
